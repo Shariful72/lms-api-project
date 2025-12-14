@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+        
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .course-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .course-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .course-card .price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #764ba2;
+            margin: 10px 0;
+        }
+        
+        .enrolled-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .balance-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .balance-display h2 {
+            font-size: 2em;
+        }
+        
+        .material-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .nav-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Learning Management System</h1>
+            <p>Expand Your Knowledge, Elevate Your Skills</p>
+        </div>
+        
+        <div class="content">
+            <!-- Login Section -->
+            <div id="loginSection" class="section active">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password">
+                </div>
+                <button class="btn" onclick="login()">Login</button>
+                <button class="btn btn-secondary" onclick="showSection('registerSection')">Register</button>
+                <div id="loginMessage"></div>
+            </div>
+            
+            <!-- Register Section -->
+            <div id="registerSection" class="section">
+                <h2>Register</h2>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose username">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="Your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Choose password">
+                </div>
+                <button class="btn" onclick="register()">Register</button>
+                <button class="btn btn-secondary" onclick="showSection('loginSection')">Back to Login</button>
+                <div id="registerMessage"></div>
+            </div>
+            
+            <!-- Bank Setup Section -->
+            <div id="bankSetupSection" class="section">
+                <h2>Bank Account Setup</h2>
+                <div class="info-box">
+                    <p>Before you can enroll in courses, please set up your bank account information.</p>
+                </div>
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" id="bankAccount" placeholder="Enter account number">
+                </div>
+                <div class="form-group">
+                    <label>Bank Secret/PIN</label>
+                    <input type="password" id="bankSecret" placeholder="Enter secret">
+                </div>
+                <div class="form-group">
+                    <label>Initial Balance</label>
+                    <input type="number" id="initialBalance" value="5000" placeholder="Initial balance">
+                </div>
+                <button class="btn" onclick="setupBank()">Setup Bank Account</button>
+                <div id="bankSetupMessage"></div>
+            </div>
+            
+            <!-- Dashboard Section -->
+            <div id="dashboardSection" class="section">
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="showTab('courses')">Available Courses</button>
+                    <button class="nav-tab" onclick="showTab('enrollments')">My Enrollments</button>
+                    <button class="nav-tab" onclick="showTab('balance')">Balance</button>
+                </div>
+                
+                <div id="coursesTab" class="tab-content">
+                    <h2>Available Courses</h2>
+                    <div id="coursesList" class="course-grid"></div>
+                </div>
+                
+                <div id="enrollmentsTab" class="tab-content" style="display:none;">
+                    <h2>My Enrollments</h2>
+                    <div id="enrollmentsList"></div>
+                </div>
+                
+                <div id="balanceTab" class="tab-content" style="display:none;">
+                    <h2>Account Balance</h2>
+                    <div class="balance-display">
+                        <p>Current Balance</p>
+                        <h2 id="balanceAmount">Loading...</h2>
+                    </div>
+                    <button class="btn" onclick="loadBalance()">Refresh Balance</button>
+                </div>
+                
+                <button class="btn btn-secondary" onclick="logout()" style="margin-top: 20px;">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        const API_URL = 'http://localhost:3000/api';
+        
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+        
+        function showTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').style.display = 'block';
+            
+            if (tabName === 'courses') loadCourses();
+            if (tabName === 'enrollments') loadEnrollments();
+            if (tabName === 'balance') loadBalance();
+        }
+        
+        async function register() {
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/users/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('registerMessage').innerHTML = 
+                        '<div class="alert alert-success">Registration successful! Please login.</div>';
+                    setTimeout(() => showSection('loginSection'), 2000);
+                } else {
+                    document.getElementById('registerMessage').innerHTML = 
+                        `<div class="alert alert-error">${data.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('registerMessage').innerHTML = 
+                    '<div class="alert alert-error">Registration failed</div>';
+            }
+        }
+        
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/users/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentUser = data.user;
+                    
+                    if (!data.user.hasBank) {
+                        showSection('bankSetupSection');
+                    } else {
+                        showSection('dashboardSection');
+                        loadCourses();
+                    }
+                } else {
+                    document.getElementById('loginMessage').innerHTML = 
+                        `<div class="alert alert-error">${data.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('loginMessage').innerHTML = 
+                    '<div class="alert alert-error">Login failed</div>';
+            }
+        }
+        
+        async function setupBank() {
+            const accountNumber = document.getElementById('bankAccount').value;
+            const secret = document.getElementById('bankSecret').value;
+            const initialBalance = document.getElementById('initialBalance').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${currentUser.id}/bank-setup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ accountNumber, secret, initialBalance })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showSection('dashboardSection');
+                    loadCourses();
+                } else {
+                    document.getElementById('bankSetupMessage').innerHTML = 
+                        `<div class="alert alert-error">${data.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('bankSetupMessage').innerHTML = 
+                    '<div class="alert alert-error">Bank setup failed</div>';
+            }
+        }
+        
+        async function loadCourses() {
+            try {
+                const response = await fetch(`${API_URL}/courses`);
+                const courses = await response.json();
+                
+                const enrollResponse = await fetch(`${API_URL}/users/${currentUser.id}/enrollments`);
+                const enrollments = await enrollResponse.json();
+                const enrolledIds = enrollments.map(e => e.courseId);
+                
+                const html = courses.map(course => `
+                    <div class="course-card">
+                        <h3>${course.title}</h3>
+                        <p>${course.description}</p>
+                        <div class="price">৳${course.price}</div>
+                        ${enrolledIds.includes(course.id) ? 
+                            '<span class="enrolled-badge">Enrolled</span>' :
+                            `<button class="btn" onclick="enrollCourse('${course.id}')">Enroll Now</button>`
+                        }
+                    </div>
+                `).join('');
+                
+                document.getElementById('coursesList').innerHTML = html;
+            } catch (error) {
+                console.error('Failed to load courses', error);
+            }
+        }
+        
+        async function enrollCourse(courseId) {
+            if (!confirm('Are you sure you want to enroll in this course?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/enroll`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: currentUser.id, courseId })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Enrollment successful!');
+                    loadCourses();
+                } else {
+                    alert('Enrollment failed: ' + data.error);
+                }
+            } catch (error) {
+                alert('Enrollment failed');
+            }
+        }
+        
+        async function loadEnrollments() {
+            try {
+                const response = await fetch(`${API_URL}/users/${currentUser.id}/enrollments`);
+                const enrollments = await response.json();
+                
+                const html = enrollments.map(enrollment => `
+                    <div class="course-card">
+                        <h3>${enrollment.course.title}</h3>
+                        <p>${enrollment.course.description}</p>
+                        <p><strong>Enrolled:</strong> ${new Date(enrollment.enrolledAt).toLocaleDateString()}</p>
+                        <p><strong>Status:</strong> ${enrollment.completed ? 'Completed ✅' : 'In Progress'}</p>
+                        ${!enrollment.completed ? 
+                            `<button class="btn" onclick="completeCourse('${enrollment.id}')">Mark as Complete</button>` :
+                            '<span class="enrolled-badge">Certificate Available</span>'
+                        }
+                    </div>
+                `).join('');
+                
+                document.getElementById('enrollmentsList').innerHTML = html || '<p>No enrollments yet.</p>';
+            } catch (error) {
+                console.error('Failed to load enrollments', error);
+            }
+        }
+        
+        async function completeCourse(enrollmentId) {
+            try {
+                const response = await fetch(`${API_URL}/enrollments/${enrollmentId}/complete`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Congratulations! Course completed. Certificate ID: ' + data.certificateId);
+                    loadEnrollments();
+                }
+            } catch (error) {
+                alert('Failed to complete course');
+            }
+        }
+        
+        async function loadBalance() {
+            try {
+                const response = await fetch(`${API_URL}/users/${currentUser.id}/balance`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('balanceAmount').textContent = '৳' + data.balance;
+                }
+            } catch (error) {
+                document.getElementById('balanceAmount').textContent = 'Error loading balance';
+            }
+        }
+        
+        function logout() {
+            currentUser = null;
+            showSection('loginSection');
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+    </script>
+</body>
+</html>
